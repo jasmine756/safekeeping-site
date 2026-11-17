@@ -392,6 +392,9 @@
               </sc-if>
             </div>
             <p style="margin: 0; font-family: 'Libre Caslon Text', Georgia, serif; font-weight: 700; font-size: clamp(15px, 1.6vw, 17px); line-height: 1.25">{{ item.title }}</p>
+            <sc-if value="{{ item.detail }}">
+              <p style="margin: 0; font-family: 'Libre Caslon Text', Georgia, serif; font-style: italic; font-size: 15px; line-height: 1.35">{{ item.detail }}</p>
+            </sc-if>
             <p style="margin: 0; font-family: 'Courier Prime', monospace; font-size: 12px; font-weight: 700; letter-spacing: 0.06em">{{ item.meta }}</p>
             <p style="margin: 0; font-family: Anton, Impact, sans-serif; font-size: 24px; letter-spacing: 0.03em">{{ item.price }}</p>
           </a>
@@ -1000,7 +1003,8 @@ class Component extends DCLogic {
         shopItems: picks.map((r) => ({
           href: "/shop/?item=" + encodeURIComponent(r.id),
           img: img(r.images && r.images[0]),
-          title: r.title.split(" — ")[0],
+          title: r.title.split(" — ")[0].split(": ")[0],
+          detail: r.title.split(" — ").slice(1).join(" — "),
           meta: [r.creator, r.year].filter(Boolean).join(" · "),
           price: r.status === "sold" ? "Sold" : money(r.price_cents),
           sold: r.status === "sold"

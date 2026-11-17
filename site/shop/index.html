@@ -193,6 +193,7 @@
     <button class="chip" data-f="magazine" aria-pressed="false">Magazines</button>
     <button class="chip" data-f="decor" aria-pressed="false">Home + holiday</button>
     <button class="chip" data-f="available" aria-pressed="false">Still here</button>
+    <button class="chip" data-f="sold" aria-pressed="false">Already gone</button>
   </div>
 </div>
 
@@ -255,7 +256,7 @@ import { quoteShipping, money } from "./shipping.js";
 
 const SUPABASE_URL = "https://deeuvcgppbyxflvrelzy.supabase.co";
 const SUPABASE_KEY = "sb_publishable_xySGLwiTEcmqO2vUInkWDA_cbxeFccW"; // public key: read-only for the shop
-const SOLD_SHOW_DAYS = 21; // sold items stay up (stamped SOLD) this long
+const SOLD_SHOW_DAYS = null; // null = sold items stay up forever, stamped SOLD (set a number of days to hide old ones)
 
 const LABELS = { book: "Book", cd: "Music", magazine: "Magazine", decor: "Home + holiday", other: "Find" };
 const $ = (s, el = document) => el.querySelector(s);
@@ -292,8 +293,11 @@ async function load() {
       headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
     });
     if (!res.ok) throw new Error(res.status);
-    const cutoff = Date.now() - SOLD_SHOW_DAYS * 864e5;
-    products = (await res.json()).filter((p) => p.status !== "sold" || !p.sold_at || new Date(p.sold_at) > cutoff);
+    const cutoff = Date.now() - (SOLD_SHOW_DAYS || 0) * 864e5;
+    products = (await res.json()).filter((p) => !SOLD_SHOW_DAYS || p.status !== "sold" || !p.sold_at || new Date(p.sold_at) > cutoff);
+    // available first, then on hold, then sold, so the archive builds up underneath
+    const rank = { available: 0, reserved: 1, sold: 2 };
+    products.sort((a, b) => (rank[statusOf(a)] ?? 0) - (rank[statusOf(b)] ?? 0));
   } catch (e) {
     $("#grid").innerHTML = `<p class="empty">The shop is restocking. Check back shortly.</p>`;
     return;
@@ -311,7 +315,7 @@ async function load() {
 // ─── grid ───
 function render() {
   const list = products.filter((p) =>
-    filter === "all" ? true : filter === "available" ? statusOf(p) === "available" : p.category === filter
+    filter === "all" ? true : filter === "available" ? statusOf(p) === "available" : filter === "sold" ? statusOf(p) === "sold" : p.category === filter
   );
   if (!list.length) {
     $("#grid").innerHTML = `<p class="empty">${products.length ? "Nothing in this box right now." : "First drop lands Black Friday. Get on the list below."}</p>`;

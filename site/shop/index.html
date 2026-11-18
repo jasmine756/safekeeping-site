@@ -64,6 +64,14 @@
   .hero h1 { margin: 0; font-size: clamp(52px, 11vw, 112px); line-height: .9; }
   .hero p { margin: 0; max-width: 46ch; font-size: clamp(17px, 2.2vw, 21px); line-height: 1.5; }
   .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  .fund { display: grid; gap: 8px; max-width: 520px; margin-top: 8px; }
+  .fund-row { display: flex; align-items: baseline; gap: 10px; font-size: 12px; }
+  .fund-row span:first-child { font-family: var(--display); font-weight: 400; font-size: 34px; letter-spacing: .02em; text-transform: none; }
+  .fund-track { height: 16px; border: 2px solid var(--ink); background: var(--cream); }
+  .fund-fill { height: 100%; width: 0; background: var(--ink); transition: width .8s ease; }
+  .fund-note { margin: 0; font-size: 11px; }
+  .give { display: grid; gap: 6px; padding: 14px; border: 2px dashed var(--ink); font-family: var(--mono); font-size: 12px; line-height: 1.5; }
+  .give a { color: var(--ink); font-weight: 700; text-decoration: underline; }
   .pill { display: inline-flex; align-items: center; min-height: 30px; padding: 0 12px; border: 2px solid var(--ink); border-radius: 15px; font-size: 11px; }
 
   /* filters */
@@ -163,8 +171,8 @@
 <body>
 
 <div class="ticker mono" aria-hidden="true"><div class="ticker-track">
-  <span>One copy each</span>✳<span>When it's gone, it's gone</span>✳<span>Ships from LA via USPS</span>✳<span>Doubles from the dig</span>✳
-  <span>One copy each</span>✳<span>When it's gone, it's gone</span>✳<span>Ships from LA via USPS</span>✳<span>Doubles from the dig</span>✳
+  <span>25% of every sale funds the Book Fund</span>✳<span>One copy each</span>✳<span>When it's gone, it's gone</span>✳<span>Shop Black. Literally.</span>✳
+  <span>25% of every sale funds the Book Fund</span>✳<span>One copy each</span>✳<span>When it's gone, it's gone</span>✳<span>Shop Black. Literally.</span>✳
 </div></div>
 
 <header class="top" id="hdr">
@@ -180,8 +188,13 @@
 <section class="hero">
   <div class="hero-inner">
     <span class="kicker mono">Side C ✳ The Shop</span>
-    <h1 class="display">Doubles from<br>the dig.</h1>
-    <p>When we find two of something, one stays in safekeeping and one comes here. Books, records, magazines and the occasional piece of somebody's living room. One copy each.</p>
+    <h1 class="display">Every book<br>buys books.</h1>
+    <p>25% of every sale goes to the Safekeeping Book Fund: $2,500 to cover 2027 textbook costs for five HBCU students. You take home a piece of history. A student gets their books.</p>
+    <div class="fund" id="fund" hidden>
+      <div class="fund-row mono"><span id="fundRaised">$0</span><span>of $2,500 raised</span></div>
+      <div class="fund-track" role="progressbar" aria-label="Book Fund progress" aria-valuemin="0" aria-valuemax="2500" id="fundBar"><div class="fund-fill" id="fundFill"></div></div>
+      <p class="fund-note mono">Five students · $500 each · 2027 school year</p>
+    </div>
   </div>
 </section>
 
@@ -205,6 +218,7 @@
 
 <section class="how">
   <div class="how-inner">
+    <div><h4 class="mono">The Book Fund</h4><p>A quarter of every item's price, not counting shipping, goes toward five HBCU students' 2027 book costs. We'll share who it reaches and how it's spent. Want to give more? Become a founding member of the Rundown and $100 goes straight to the fund.</p></div>
     <div><h4 class="mono">One of one</h4><p>Every piece here is a single copy. Once it's in your bag and paid for, it's yours, and it disappears from the shelf.</p></div>
     <div><h4 class="mono">Shipping</h4><p>Books and CDs go USPS Media Mail: $4.99 for the first, $1 for each one after. Magazines and anything else go Ground Advantage, priced at checkout.</p></div>
     <div><h4 class="mono">Packed like it matters</h4><p>Magazines ship flat in rigid mailers. Books get wrapped. We pack the way we'd want ours packed.</p></div>
@@ -413,7 +427,9 @@ function renderBag(error = "") {
     <p class="hint">${esc(ship.label)}${ship.method === "ground" ? " — something in your bag can't go Media Mail, so it all ships together in one box." : ""} Tax, if any, is added at checkout.</p>
     <div class="row big"><span>Total</span><span>${money(sub + ship.cents)}</span></div>
     <button class="btn btn-orange" type="button" id="checkout">Check out</button>
-    <p class="hint">Secure checkout by Stripe. Your items are held for you for half an hour once you start.</p>`;
+    <p class="hint">Secure checkout by Stripe. Your items are held for you for half an hour once you start.</p>
+    <p class="hint"><b>${money(Math.floor(sub * 0.25))}</b> of this order goes to the Safekeeping Book Fund.</p>
+    <div class="give">Want to give more? Become a founding member of The Rundown ($180/yr). $100 of it goes straight to the Book Fund. <a href="https://safekeepingirl.substack.com/subscribe" target="_blank" rel="noopener">Become a founding member →</a></div>`;
 }
 
 async function checkout(btn) {
@@ -481,7 +497,25 @@ function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.ad
 const setHdr = () => document.documentElement.style.setProperty("--hdr", $("#hdr").offsetHeight + "px");
 addEventListener("resize", setHdr); setHdr();
 
+async function loadFund() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/book_fund_progress`, {
+      method: "POST",
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, "Content-Type": "application/json" },
+      body: "{}",
+    });
+    if (!res.ok) return;
+    const f = await res.json();
+    const pct = Math.min(100, (f.raised_cents / f.goal_cents) * 100);
+    $("#fundRaised").textContent = money(f.raised_cents);
+    $("#fundBar").setAttribute("aria-valuenow", Math.round(f.raised_cents / 100));
+    $("#fund").hidden = false;
+    requestAnimationFrame(() => { $("#fundFill").style.width = Math.max(pct, 1.5) + "%"; });
+  } catch {}
+}
+
 load();
+loadFund();
 </script>
 </body>
 </html>

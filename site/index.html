@@ -50,7 +50,7 @@
 <div style="background: #14100D; color: #FAF0E0; font-family: 'Libre Caslon Text', Georgia, serif; overflow-x: hidden">
 
   <div style="overflow: hidden; white-space: nowrap; padding: 9px 0; background: #FC3703; color: #14100D; font-family: 'Courier Prime', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase">
-    <span style="padding: 0 14px">The Rundown is out now</span>✳<span style="padding: 0 14px">New issue every Thursday</span>✳<span style="padding: 0 14px">We scan estate sales nationwide</span>✳<span style="padding: 0 14px">The Rundown is out now</span>✳<span style="padding: 0 14px">New issue every Thursday</span>✳<span style="padding: 0 14px">We scan estate sales nationwide</span>
+    <span style="padding: 0 14px">The Rundown is out now</span>✳<span style="padding: 0 14px">New issue every Thursday</span>✳<span style="padding: 0 14px">Shop Black. Literally. 25% funds HBCU students&rsquo; books</span>✳<span style="padding: 0 14px">The Rundown is out now</span>✳<span style="padding: 0 14px">New issue every Thursday</span>✳<span style="padding: 0 14px">Shop Black. Literally. 25% funds HBCU students&rsquo; books</span>
   </div>
 
   <header style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 30px; padding: 16px clamp(18px, 5vw, 52px); background: #14100D; border-bottom: 2px solid #FC3703">
@@ -377,9 +377,15 @@
           <sc-if value="{{ ninetiesMarkers }}" hint-placeholder-val="{{ true }}">
             <p style="margin: 0 0 14px; font-family: 'Courier Prime', monospace; font-size: 12px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase">Side C ✳ The Shop</p>
           </sc-if>
-          <h2 style="margin: 0; font-family: Anton, Impact, sans-serif; font-weight: 400; font-size: clamp(44px, 9vw, 96px); line-height: 0.9; text-transform: uppercase; letter-spacing: 0.02em">Doubles from the dig.</h2>
+          <h2 style="margin: 0; font-family: Anton, Impact, sans-serif; font-weight: 400; font-size: clamp(44px, 9vw, 96px); line-height: 0.9; text-transform: uppercase; letter-spacing: 0.02em">Every book buys books.</h2>
         </div>
-        <p style="margin: 0; max-width: 40ch; font-family: 'Libre Caslon Text', Georgia, serif; font-size: 18px; line-height: 1.5">When we find two of something, one stays in safekeeping and one comes here. One copy each. When it&rsquo;s gone, it&rsquo;s gone.</p>
+        <p style="margin: 0; max-width: 40ch; font-family: 'Libre Caslon Text', Georgia, serif; font-size: 18px; line-height: 1.5">25% of every sale goes to the Safekeeping Book Fund: $2,500 for five HBCU students&rsquo; 2027 books. One copy each. When it&rsquo;s gone, it&rsquo;s gone.</p>
+        <sc-if value="{{ fundShow }}">
+          <div style="display: grid; gap: 8px; width: 100%; max-width: 520px">
+            <div style="display: flex; align-items: baseline; gap: 10px; font-family: 'Courier Prime', monospace; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase"><span style="font-family: Anton, Impact, sans-serif; font-weight: 400; font-size: 34px; letter-spacing: 0.02em">{{ fundRaised }}</span><span>of $2,500 raised</span></div>
+            <div style="height: 16px; border: 2px solid #14100D; background: #FAF0E0"><div style="height: 100%; width: {{ fundPct }}; background: #14100D"></div></div>
+          </div>
+        </sc-if>
       </div>
 
       <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: clamp(14px, 2.5vw, 28px)">
@@ -992,6 +998,14 @@ class Component extends DCLogic {
       });
       if (!res.ok) return;
       const rows = await res.json();
+      try {
+        const fr = await fetch(sbUrl + "/rest/v1/rpc/book_fund_progress", { method: "POST", headers: { apikey: sbKey, Authorization: "Bearer " + sbKey, "Content-Type": "application/json" }, body: "{}" });
+        if (fr.ok) {
+          const f = await fr.json();
+          const m = (c) => "$" + (c / 100).toFixed(c % 100 === 0 ? 0 : 2);
+          this.setState({ fundShow: true, fundRaised: m(f.raised_cents), fundPct: Math.max(1.5, Math.min(100, f.raised_cents / f.goal_cents * 100)).toFixed(1) + "%" });
+        }
+      } catch (e) {}
       const now = Date.now();
       const free = (r) => r.status === "available" || (r.status === "reserved" && r.reserved_until && new Date(r.reserved_until).getTime() < now);
       const available = rows.filter(free);
@@ -1111,6 +1125,9 @@ class Component extends DCLogic {
     return {
       ninetiesMarkers: p.ninetiesMarkers ?? true,
       shopItems: this.state.shopItems || [],
+      fundShow: !!this.state.fundShow,
+      fundRaised: this.state.fundRaised || "$0",
+      fundPct: this.state.fundPct || "0%",
       deviceChrome: p.deviceChrome ?? true,
       fullForm: (p.formDetail ?? "full") === "full",
       substackUrl: p.substackUrl || "https://substack.com/@safekeepingirl",

@@ -1,0 +1,29 @@
+functionsDirectory = "/home/claude/safekeeping-site/netlify/functions"
+functionsDirectoryOrigin = "config"
+plugins = []
+headers = []
+redirects = []
+
+[build]
+publish = "/home/claude/safekeeping-site/site"
+publishOrigin = "config"
+functions = "/home/claude/safekeeping-site/netlify/functions"
+
+[build.environment]
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]
+
+[functions]
+
+[functions."*"]
+node_bundler = "esbuild"

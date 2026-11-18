@@ -1,2 +1,11 @@
 [build]
   publish = "site"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+[build.environment]
+  # The Supabase address is public (it's already in the page); don't let
+  # Netlify's secret scanner block the build because it was marked secret.
+  SECRETS_SCAN_OMIT_KEYS = "SUPABASE_URL"

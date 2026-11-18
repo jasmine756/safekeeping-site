@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Shop — Safekeeping</title>
+<meta name="description" content="Doubles from the dig. One-of-one books, records, magazines and pieces of Black material culture found at estate sales. One copy each — when it's gone, it's gone.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Safekeeping Shop — doubles from the dig">
+<meta property="og:description" content="One-of-one books, records, magazines and pieces of Black material culture found at estate sales.">
+<meta property="og:url" content="https://safekeepingirl.netlify.app/shop/">
+<meta property="og:image" content="https://safekeepingirl.netlify.app/assets/hero-1400.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FC3703">
+<link rel="icon" href="/assets/logo.jpg">
+<link rel="apple-touch-icon" href="/assets/logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #14100D; --orange: #FC3703; --orange-hi: #FF6A3D; --cream: #FAF0E0;
+    --muted: #C9BCA6; --line: #6B5646; --paper-ink: #7A6E5D;
+    --pad: clamp(18px, 5vw, 52px);
+    --display: Anton, Impact, sans-serif;
+    --serif: 'Libre Caslon Text', Georgia, serif;
+    --mono: 'Courier Prime', monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--ink); color: var(--cream); font-family: var(--serif); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { color: var(--orange); text-decoration: none; }
+  a:hover { color: var(--orange-hi); text-decoration: underline; text-underline-offset: 3px; }
+  button, input { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+  img { display: block; max-width: 100%; }
+  .mono { font-family: var(--mono); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+  .display { font-family: var(--display); text-transform: uppercase; letter-spacing: .04em; font-weight: 400; }
+
+  /* ticker */
+  .ticker { overflow: hidden; white-space: nowrap; padding: 9px 0; background: var(--orange); color: var(--ink); font-size: 11px; }
+  .ticker-track { display: inline-block; animation: tick 38s linear infinite; }
+  .ticker span { padding: 0 14px; }
+  @keyframes tick { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .ticker-track { animation: none; } }
+
+  /* header */
+  header.top { position: sticky; top: 0; z-index: 30; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 26px; padding: 14px var(--pad); background: var(--ink); border-bottom: 2px solid var(--orange); }
+  .brand { display: inline-flex; align-items: baseline; gap: 10px; color: var(--cream); }
+  .brand:hover { text-decoration: none; color: var(--cream); }
+  .brand b { font-family: var(--display); font-weight: 400; font-size: clamp(22px, 5.4vw, 28px); letter-spacing: .06em; text-transform: uppercase; }
+  .brand i { font-style: normal; color: var(--orange); font-size: 13px; }
+  header nav { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; font-size: 12px; }
+  header nav a { color: var(--cream); }
+  .bag-btn { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 16px; background: var(--orange); color: var(--ink); border: 0; font-size: 12px; }
+  .bag-btn:hover { background: var(--cream); }
+  .bag-count { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 6px; background: var(--ink); color: var(--cream); border-radius: 11px; font-size: 11px; letter-spacing: 0; }
+
+  /* hero */
+  .hero { background: var(--orange); color: var(--ink); padding: clamp(34px, 6vw, 68px) var(--pad) clamp(30px, 5vw, 56px); }
+  .hero-inner { max-width: 1280px; margin: 0 auto; display: grid; gap: 18px; }
+  .kicker { font-size: 12px; }
+  .hero h1 { margin: 0; font-size: clamp(52px, 11vw, 112px); line-height: .9; }
+  .hero p { margin: 0; max-width: 46ch; font-size: clamp(17px, 2.2vw, 21px); line-height: 1.5; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  .pill { display: inline-flex; align-items: center; min-height: 30px; padding: 0 12px; border: 2px solid var(--ink); border-radius: 15px; font-size: 11px; }
+
+  /* filters */
+  .bar { position: sticky; top: var(--hdr, 70px); z-index: 20; background: var(--cream); color: var(--ink); border-bottom: 2px solid var(--ink); }
+  .bar-inner { max-width: 1280px; margin: 0 auto; padding: 12px var(--pad); display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+  .bar-inner::-webkit-scrollbar { display: none; }
+  .chip { flex: none; min-height: 38px; padding: 0 16px; border: 2px solid var(--ink); background: transparent; font-size: 12px; }
+  .chip[aria-pressed="true"] { background: var(--ink); color: var(--cream); }
+
+  /* grid */
+  main { background: var(--cream); color: var(--ink); padding: clamp(28px, 5vw, 56px) var(--pad) clamp(46px, 7vw, 84px); }
+  .grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: clamp(18px, 3vw, 32px); }
+  .card { display: grid; gap: 10px; align-content: start; background: none; border: 0; padding: 0; text-align: left; }
+  .card-img { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: #E8DCC6; border: 2px solid var(--ink); }
+  .card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+  .card:hover .card-img img { transform: scale(1.03); }
+  .card-tag { position: absolute; left: 10px; top: 10px; padding: 5px 9px; background: var(--ink); color: var(--cream); font-size: 10px; }
+  .stamp { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(20,16,13,.45); }
+  .stamp span { padding: 8px 18px; border: 4px solid var(--orange); color: var(--orange); background: var(--ink); font-family: var(--display); font-size: 30px; letter-spacing: .08em; transform: rotate(-8deg); }
+  .card h3 { margin: 0; font-family: var(--serif); font-weight: 700; font-size: 18px; line-height: 1.25; }
+  .card .meta { margin: 0; font-family: var(--mono); font-size: 12px; color: var(--paper-ink); }
+  .card .price { font-family: var(--display); font-size: 24px; letter-spacing: .03em; }
+  .card.is-gone h3, .card.is-gone .price { opacity: .55; }
+  .empty { grid-column: 1 / -1; padding: 40px 0; text-align: center; font-family: var(--mono); font-size: 14px; color: var(--paper-ink); }
+
+  /* fine print band */
+  .how { background: var(--ink); padding: clamp(40px, 6vw, 72px) var(--pad); }
+  .how-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 28px; }
+  .how h4 { margin: 0 0 8px; color: var(--orange); font-size: 12px; }
+  .how p { margin: 0; color: var(--cream); line-height: 1.6; font-size: 16px; }
+
+  /* merch */
+  .merch { background: var(--orange); color: var(--ink); padding: clamp(42px, 7vw, 84px) var(--pad); }
+  .merch-inner { max-width: 880px; margin: 0 auto; display: grid; gap: 16px; text-align: center; justify-items: center; }
+  .merch h2 { margin: 0; font-size: clamp(40px, 9vw, 92px); line-height: .92; }
+  .merch p { margin: 0; max-width: 44ch; font-size: 18px; line-height: 1.5; }
+  .merch form { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; width: 100%; max-width: 520px; margin-top: 8px; }
+  .merch input[type=email] { flex: 1 1 240px; min-height: 54px; padding: 0 16px; border: 2px solid var(--ink); background: var(--cream); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 54px; padding: 0 28px; border: 0; background: var(--ink); color: var(--cream); font-family: var(--display); font-size: 17px; letter-spacing: .09em; text-transform: uppercase; }
+  .btn:hover { background: var(--cream); color: var(--ink); }
+  .btn[disabled] { opacity: .6; cursor: wait; }
+  .btn-orange { background: var(--orange); color: var(--ink); }
+  .btn-orange:hover { background: var(--cream); }
+  .note { font-family: var(--mono); font-size: 12px; }
+
+  footer { padding: 34px var(--pad); border-top: 2px solid var(--orange); }
+  footer .row { max-width: 1280px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 14px 26px; justify-content: space-between; align-items: center; font-size: 12px; }
+  footer a { color: var(--cream); }
+
+  /* item dialog */
+  dialog { border: 0; padding: 0; max-width: min(1040px, 100vw); width: 100%; max-height: 100dvh; background: var(--cream); color: var(--ink); }
+  dialog::backdrop { background: rgba(20,16,13,.75); }
+  .item { display: grid; grid-template-columns: 1fr; }
+  @media (min-width: 820px) { .item { grid-template-columns: 1.1fr 1fr; } dialog { max-height: 92vh; } }
+  .gallery { background: #E8DCC6; }
+  .gallery-main { aspect-ratio: 4 / 5; width: 100%; object-fit: cover; }
+  .thumbs { display: flex; gap: 6px; padding: 8px; overflow-x: auto; }
+  .thumbs button { flex: none; width: 64px; height: 64px; padding: 0; border: 2px solid transparent; background: none; }
+  .thumbs button[aria-current="true"] { border-color: var(--ink); }
+  .thumbs img { width: 100%; height: 100%; object-fit: cover; }
+  .item-body { position: relative; display: grid; gap: 16px; align-content: start; padding: clamp(22px, 4vw, 40px); }
+  .item-body h2 { margin: 0; font-family: var(--serif); font-size: clamp(26px, 4vw, 36px); line-height: 1.15; }
+  .item-body .price { font-family: var(--display); font-size: 34px; }
+  .item-body .story { margin: 0; font-size: 17px; line-height: 1.65; }
+  .facts { display: grid; gap: 8px; margin: 0; padding: 16px 0; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); font-family: var(--mono); font-size: 13px; }
+  .facts div { display: grid; grid-template-columns: 110px 1fr; gap: 10px; }
+  .facts dt { font-weight: 700; letter-spacing: .1em; text-transform: uppercase; font-size: 11px; padding-top: 2px; }
+  .facts dd { margin: 0; }
+  .x { position: absolute; right: 12px; top: 12px; width: 44px; height: 44px; border: 2px solid var(--ink); background: var(--cream); font-size: 20px; line-height: 1; }
+
+  /* bag drawer */
+  .drawer { position: fixed; inset: 0; z-index: 50; display: none; }
+  .drawer.open { display: block; }
+  .drawer-shade { position: absolute; inset: 0; background: rgba(20,16,13,.7); }
+  .drawer-panel { position: absolute; right: 0; top: 0; bottom: 0; width: min(440px, 100vw); display: grid; grid-template-rows: auto 1fr auto; background: var(--cream); color: var(--ink); border-left: 2px solid var(--ink); }
+  .drawer-head { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; background: var(--ink); color: var(--cream); }
+  .drawer-head h2 { margin: 0; font-size: 28px; }
+  .drawer-head button { width: 40px; height: 40px; border: 2px solid var(--cream); background: none; font-size: 18px; }
+  .lines { overflow-y: auto; padding: 8px 20px; }
+  .line { display: grid; grid-template-columns: 64px 1fr auto; gap: 12px; align-items: center; padding: 14px 0; border-bottom: 1px solid #D9CBB3; }
+  .line img { width: 64px; height: 80px; object-fit: cover; border: 1px solid var(--ink); }
+  .line b { display: block; font-size: 15px; line-height: 1.3; }
+  .line .meta { font-family: var(--mono); font-size: 12px; color: var(--paper-ink); }
+  .line .rm { border: 0; background: none; padding: 4px 0; font-family: var(--mono); font-size: 11px; text-decoration: underline; color: var(--paper-ink); }
+  .line .warn { color: #B42318; font-family: var(--mono); font-size: 11px; font-weight: 700; }
+  .totals { display: grid; gap: 10px; padding: 18px 20px 22px; border-top: 2px solid var(--ink); }
+  .totals .row { display: flex; justify-content: space-between; gap: 12px; font-family: var(--mono); font-size: 13px; }
+  .totals .row.big { font-family: var(--display); font-size: 24px; letter-spacing: .03em; }
+  .totals .hint { margin: 0; font-family: var(--mono); font-size: 11px; color: var(--paper-ink); line-height: 1.5; }
+  .err { margin: 0; padding: 10px 12px; background: #FDE4DC; border-left: 4px solid var(--orange); font-family: var(--mono); font-size: 12px; }
+
+  .toast { position: fixed; left: 50%; bottom: 22px; z-index: 60; transform: translateX(-50%) translateY(120px); padding: 14px 20px; background: var(--ink); color: var(--cream); border: 2px solid var(--orange); font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; transition: transform .25s ease; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="ticker mono" aria-hidden="true"><div class="ticker-track">
+  <span>One copy each</span>✳<span>When it's gone, it's gone</span>✳<span>Ships from LA via USPS</span>✳<span>Doubles from the dig</span>✳
+  <span>One copy each</span>✳<span>When it's gone, it's gone</span>✳<span>Ships from LA via USPS</span>✳<span>Doubles from the dig</span>✳
+</div></div>
+
+<header class="top" id="hdr">
+  <a class="brand" href="/"><b>Safekeeping</b><i>✳</i></a>
+  <nav class="mono">
+    <a href="/#rundown">The Rundown</a>
+    <a href="/#papertrail">Black Paper Trail</a>
+    <a href="/shop/" aria-current="page" style="color: var(--orange)">Shop</a>
+    <button class="bag-btn mono" id="openBag" type="button">Bag <span class="bag-count" id="bagCount">0</span></button>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <span class="kicker mono">Side C ✳ The Shop</span>
+    <h1 class="display">Doubles from<br>the dig.</h1>
+    <p>When we find two of something, one stays in safekeeping and one comes here. Books, records, magazines and the occasional piece of somebody's living room. One copy each.</p>
+  </div>
+</section>
+
+<div class="bar" id="bar">
+  <div class="bar-inner mono" role="toolbar" aria-label="Filter the shop">
+    <button class="chip" data-f="all" aria-pressed="true">Everything</button>
+    <button class="chip" data-f="book" aria-pressed="false">Books</button>
+    <button class="chip" data-f="cd" aria-pressed="false">Music</button>
+    <button class="chip" data-f="magazine" aria-pressed="false">Magazines</button>
+    <button class="chip" data-f="decor" aria-pressed="false">Home + holiday</button>
+    <button class="chip" data-f="available" aria-pressed="false">Still here</button>
+    <button class="chip" data-f="sold" aria-pressed="false">Already gone</button>
+  </div>
+</div>
+
+<main>
+  <div class="grid" id="grid" aria-live="polite">
+    <p class="empty">Pulling the boxes out of the trunk…</p>
+  </div>
+</main>
+
+<section class="how">
+  <div class="how-inner">
+    <div><h4 class="mono">One of one</h4><p>Every piece here is a single copy. Once it's in your bag and paid for, it's yours, and it disappears from the shelf.</p></div>
+    <div><h4 class="mono">Shipping</h4><p>Books and CDs go USPS Media Mail: $4.99 for the first, $1 for each one after. Magazines and anything else go Ground Advantage, priced at checkout.</p></div>
+    <div><h4 class="mono">Packed like it matters</h4><p>Magazines ship flat in rigid mailers. Books get wrapped. We pack the way we'd want ours packed.</p></div>
+    <div><h4 class="mono">Questions</h4><p>Condition notes are honest and photos are the actual item. Ask before you buy. All sales final unless it arrives damaged.</p></div>
+  </div>
+</section>
+
+<section class="merch" id="merch">
+  <div class="merch-inner">
+    <span class="mono kicker">Coming soon</span>
+    <h2 class="display">Safekeeping merch.</h2>
+    <p>The designs are done. We're checking how they print before we put our name on them. Get on the list and you'll hear first.</p>
+    <form id="merchForm">
+      <label for="merchEmail" class="mono" style="position:absolute;left:-9999px">Email</label>
+      <input id="merchEmail" type="email" name="email" placeholder="you@email.com" required autocomplete="email">
+      <button class="btn" type="submit">Put me on</button>
+    </form>
+    <p class="note" id="merchNote" hidden></p>
+  </div>
+</section>
+
+<footer>
+  <div class="row mono">
+    <a class="brand" href="/"><b style="font-size:22px">Safekeeping</b><i>✳</i></a>
+    <a href="https://substack.com/@safekeepingirl" style="color: var(--orange)">Safekeeping on Substack →</a>
+    <span style="color: var(--muted)">© 2026 Safekeeping</span>
+  </div>
+</footer>
+
+<!-- item detail -->
+<dialog id="itemDialog" aria-labelledby="itemTitle">
+  <div class="item" id="itemContent"></div>
+</dialog>
+
+<!-- bag -->
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-shade" data-close></div>
+  <aside class="drawer-panel" role="dialog" aria-modal="true" aria-labelledby="bagTitle">
+    <div class="drawer-head"><h2 class="display" id="bagTitle">Your bag</h2><button type="button" data-close aria-label="Close bag">✕</button></div>
+    <div class="lines" id="lines"></div>
+    <div class="totals" id="totals"></div>
+  </aside>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script type="module">
+import { quoteShipping, money } from "./shipping.js";
+
+const SUPABASE_URL = "https://deeuvcgppbyxflvrelzy.supabase.co";
+const SUPABASE_KEY = "sb_publishable_xySGLwiTEcmqO2vUInkWDA_cbxeFccW"; // public key: read-only for the shop
+const SOLD_SHOW_DAYS = null; // null = sold items stay up forever, stamped SOLD (set a number of days to hide old ones)
+
+const LABELS = { book: "Book", cd: "Music", magazine: "Magazine", decor: "Home + holiday", other: "Find" };
+const $ = (s, el = document) => el.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const img = (src) => (!src ? "/assets/logo.jpg" : /^https?:/.test(src) ? src : "/" + src.replace(/^\/+/, ""));
+
+let products = [];
+let filter = "all";
+
+// ─── bag (kept in this browser only) ───
+const store = {
+  get() { try { return JSON.parse(localStorage.getItem("sk_bag") || "[]"); } catch { return memBag; } },
+  set(v) { memBag = v; try { localStorage.setItem("sk_bag", JSON.stringify(v)); } catch {} },
+};
+let memBag = [];
+let bag = store.get();
+const inBag = (id) => bag.includes(id);
+const byId = (id) => products.find((p) => p.id === id);
+
+function isFree(p) {
+  if (p.status === "available") return true;
+  if (p.status === "reserved" && p.reserved_until && new Date(p.reserved_until) < new Date()) return true;
+  return false;
+}
+function statusOf(p) {
+  if (isFree(p)) return "available";
+  return p.status; // reserved | sold
+}
+
+// ─── load ───
+async function load() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/products?select=*&order=sort.asc,created_at.desc`, {
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
+    });
+    if (!res.ok) throw new Error(res.status);
+    const cutoff = Date.now() - (SOLD_SHOW_DAYS || 0) * 864e5;
+    products = (await res.json()).filter((p) => !SOLD_SHOW_DAYS || p.status !== "sold" || !p.sold_at || new Date(p.sold_at) > cutoff);
+    // available first, then on hold, then sold, so the archive builds up underneath
+    const rank = { available: 0, reserved: 1, sold: 2 };
+    products.sort((a, b) => (rank[statusOf(a)] ?? 0) - (rank[statusOf(b)] ?? 0));
+  } catch (e) {
+    $("#grid").innerHTML = `<p class="empty">The shop is restocking. Check back shortly.</p>`;
+    return;
+  }
+  // drop anything from the bag that's no longer for sale
+  bag = bag.filter((id) => byId(id) && statusOf(byId(id)) === "available");
+  store.set(bag);
+  render();
+  renderBag();
+  const want = new URLSearchParams(location.search).get("item");
+  if (want && byId(want)) openItem(want);
+  if (new URLSearchParams(location.search).get("canceled")) toast("Checkout canceled. Your bag is still here.");
+}
+
+// ─── grid ───
+function render() {
+  const list = products.filter((p) =>
+    filter === "all" ? true : filter === "available" ? statusOf(p) === "available" : filter === "sold" ? statusOf(p) === "sold" : p.category === filter
+  );
+  if (!list.length) {
+    $("#grid").innerHTML = `<p class="empty">${products.length ? "Nothing in this box right now." : "First drop lands Black Friday. Get on the list below."}</p>`;
+    return;
+  }
+  $("#grid").innerHTML = list.map((p) => {
+    const st = statusOf(p);
+    const gone = st !== "available";
+    return `<button class="card${gone ? " is-gone" : ""}" type="button" data-open="${esc(p.id)}">
+      <div class="card-img">
+        <img loading="lazy" decoding="async" src="${esc(img(p.images?.[0]))}" alt="${esc(p.title)}">
+        <span class="card-tag mono">${esc(LABELS[p.category] || "Find")}</span>
+        ${st === "sold" ? `<div class="stamp"><span>Sold</span></div>` : st === "reserved" ? `<div class="stamp"><span>On hold</span></div>` : ""}
+      </div>
+      <h3>${esc(p.title)}</h3>
+      <p class="meta">${esc([p.creator, p.year].filter(Boolean).join(" · "))}</p>
+      <span class="price">${money(p.price_cents)}</span>
+    </button>`;
+  }).join("");
+}
+
+// ─── item dialog ───
+const dlg = $("#itemDialog");
+function openItem(id) {
+  const p = byId(id);
+  if (!p) return;
+  const st = statusOf(p);
+  const pics = p.images?.length ? p.images : [null];
+  $("#itemContent").innerHTML = `
+    <div class="gallery">
+      <img class="gallery-main" id="mainPic" src="${esc(img(pics[0]))}" alt="${esc(p.title)}">
+      ${pics.length > 1 ? `<div class="thumbs">${pics.map((s, i) => `<button type="button" data-pic="${i}" aria-current="${i === 0}" aria-label="Photo ${i + 1}"><img src="${esc(img(s))}" alt=""></button>`).join("")}</div>` : ""}
+    </div>
+    <div class="item-body">
+      <button class="x" type="button" data-x aria-label="Close">✕</button>
+      <span class="mono" style="font-size:12px">${esc(LABELS[p.category] || "Find")} ✳ One of one</span>
+      <h2 id="itemTitle">${esc(p.title)}</h2>
+      ${p.creator || p.year ? `<span class="mono" style="font-size:13px;color:var(--paper-ink)">${esc([p.creator, p.year].filter(Boolean).join(" · "))}</span>` : ""}
+      <span class="price">${money(p.price_cents)}</span>
+      ${p.story ? `<p class="story">${esc(p.story)}</p>` : ""}
+      <dl class="facts">
+        ${p.condition ? `<div><dt>Condition</dt><dd>${esc(p.condition)}</dd></div>` : ""}
+        <div><dt>Ships</dt><dd>${p.ship_class === "media" ? "USPS Media Mail" : "USPS Ground Advantage"}</dd></div>
+      </dl>
+      ${st === "available"
+        ? `<button class="btn btn-orange" type="button" data-add="${esc(p.id)}">${inBag(p.id) ? "In your bag ✓" : "Add to bag"}</button>`
+        : `<button class="btn" type="button" disabled>${st === "sold" ? "Sold — somebody's keeping it safe" : "On hold — someone's checking out"}</button>`}
+    </div>`;
+  history.replaceState(null, "", `?item=${encodeURIComponent(id)}`);
+  if (!dlg.open) dlg.showModal();
+}
+dlg.addEventListener("close", () => history.replaceState(null, "", location.pathname));
+dlg.addEventListener("click", (e) => {
+  if (e.target === dlg || e.target.closest("[data-x]")) dlg.close();
+  const t = e.target.closest("[data-pic]");
+  if (t) {
+    const p = byId(new URLSearchParams(location.search).get("item"));
+    $("#mainPic").src = img(p.images[+t.dataset.pic]);
+    dlg.querySelectorAll("[data-pic]").forEach((b) => b.setAttribute("aria-current", b === t));
+  }
+  const a = e.target.closest("[data-add]");
+  if (a) { add(a.dataset.add); a.textContent = "In your bag ✓"; }
+});
+
+// ─── bag ───
+function add(id) {
+  if (!inBag(id)) { bag.push(id); store.set(bag); }
+  renderBag();
+  toast("Added to your bag");
+}
+function remove(id) { bag = bag.filter((x) => x !== id); store.set(bag); renderBag(); }
+
+function renderBag(error = "") {
+  const items = bag.map(byId).filter(Boolean);
+  $("#bagCount").textContent = items.length;
+  if (!items.length) {
+    $("#lines").innerHTML = `<p class="empty" style="padding:40px 0">Your bag is empty. Go dig.</p>`;
+    $("#totals").innerHTML = "";
+    return;
+  }
+  $("#lines").innerHTML = items.map((p) => `
+    <div class="line">
+      <img src="${esc(img(p.images?.[0]))}" alt="">
+      <div><b>${esc(p.title)}</b><span class="meta">${esc(LABELS[p.category] || "")}</span>
+        ${statusOf(p) !== "available" ? `<div class="warn">No longer available</div>` : ""}
+        <button class="rm" type="button" data-rm="${esc(p.id)}">Remove</button></div>
+      <span class="mono" style="font-size:14px">${money(p.price_cents)}</span>
+    </div>`).join("");
+  const sub = items.reduce((s, p) => s + p.price_cents, 0);
+  const ship = quoteShipping(items);
+  $("#totals").innerHTML = `
+    ${error ? `<p class="err">${esc(error)}</p>` : ""}
+    <div class="row"><span>Subtotal</span><span>${money(sub)}</span></div>
+    <div class="row"><span>Shipping</span><span>${ship.cents ? money(ship.cents) : "Free"}</span></div>
+    <p class="hint">${esc(ship.label)}${ship.method === "ground" ? " — something in your bag can't go Media Mail, so it all ships together in one box." : ""} Tax, if any, is added at checkout.</p>
+    <div class="row big"><span>Total</span><span>${money(sub + ship.cents)}</span></div>
+    <button class="btn btn-orange" type="button" id="checkout">Check out</button>
+    <p class="hint">Secure checkout by Stripe. Your items are held for you for half an hour once you start.</p>`;
+}
+
+async function checkout(btn) {
+  btn.disabled = true; btn.textContent = "Holding your items…";
+  try {
+    const res = await fetch("/api/checkout", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids: bag }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok && data.url) { location.href = data.url; return; }
+    if (res.status === 409 && data.unavailable) {
+      data.unavailable.forEach((id) => { const p = byId(id); if (p) p.status = "reserved"; });
+      render();
+      renderBag("Someone got to " + (data.unavailable.length > 1 ? "some of these" : "one of these") + " first. Remove it to keep going.");
+      return;
+    }
+    renderBag(data.error || "Checkout couldn't start. Try again in a minute.");
+  } catch {
+    renderBag("Checkout couldn't start. Check your connection and try again.");
+  }
+}
+
+const drawer = $("#drawer");
+const openBag = () => { drawer.classList.add("open"); drawer.setAttribute("aria-hidden", "false"); };
+const closeBag = () => { drawer.classList.remove("open"); drawer.setAttribute("aria-hidden", "true"); };
+$("#openBag").addEventListener("click", openBag);
+drawer.addEventListener("click", (e) => {
+  if (e.target.closest("[data-close]")) closeBag();
+  const r = e.target.closest("[data-rm]"); if (r) remove(r.dataset.rm);
+  if (e.target.id === "checkout") checkout(e.target);
+});
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeBag(); });
+
+// ─── grid + filter clicks ───
+$("#grid").addEventListener("click", (e) => { const c = e.target.closest("[data-open]"); if (c) openItem(c.dataset.open); });
+document.querySelectorAll(".chip").forEach((c) => c.addEventListener("click", () => {
+  filter = c.dataset.f;
+  document.querySelectorAll(".chip").forEach((x) => x.setAttribute("aria-pressed", x === c));
+  render();
+}));
+
+// ─── merch waitlist (same list as the rest of the site) ───
+$("#merchForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = $("#merchEmail").value.trim();
+  const note = $("#merchNote"); const btn = e.target.querySelector("button");
+  btn.disabled = true;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/submissions`, {
+      method: "POST",
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, "Content-Type": "application/json", Prefer: "return=minimal" },
+      body: JSON.stringify({ form: "merch", email, payload: { email, source: "shop", referrer: document.referrer || null } }),
+    });
+    if (!res.ok) throw 0;
+    e.target.hidden = true; note.hidden = false; note.textContent = "You're on. We'll page you when it drops. 📟";
+  } catch {
+    note.hidden = false; note.textContent = "That didn't go through. Try again?"; btn.disabled = false;
+  }
+});
+
+// ─── bits ───
+let tt;
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(tt); tt = setTimeout(() => t.classList.remove("show"), 2400); }
+const setHdr = () => document.documentElement.style.setProperty("--hdr", $("#hdr").offsetHeight + "px");
+addEventListener("resize", setHdr); setHdr();
+
+load();
+</script>
+</body>
+</html>
